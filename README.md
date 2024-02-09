@@ -25,8 +25,8 @@ sudo python3 Mikmac.py
 
 ## Requirements 🧰
 
- Python 3.x
- macchanger
+Python 3.x
+macchanger
 
 ## Customization 🎨
 
