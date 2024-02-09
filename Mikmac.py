@@ -7,6 +7,7 @@ from time import sleep
 def_delay=300
 def_way=""
 def_card=""
+def_mac=""
 cat=[
 r"""
       |\      _,,,---,,_
@@ -43,28 +44,36 @@ mode=int(input("""
 
 [2] chain (change mac adress every x seconds)
 
-[3] chain with in python file settings
+chosen mod (1,2): """)[0])
 
-chosen mode (1,2,3): """)[0])
+if mode not in [1,2]:
+    print("put an existing mod")
 
 print("\033[0;36m",cat[mode-1],"\033[0m")
-card=""
-if mode != 1:
-    if mode == 3:
+
+if mode == 2:
+    way=input(".txt file path (/home/...) : ")
+    delay=input("delay between changing mac adress (s): ")
+
+    if way=="":
         way=def_way
+    if delay=="":
         delay=def_delay
-        card=def_card
     else:
-        way=input(".txt file path (/home/...) : ")
-        delay=int(input("delay between changing mac adress (s): "))
+        delay = int(delay)
+
     with open(way, 'r') as file:
-        mac=[line[:-1] for line in file]
+        mac=[line[:17] for line in file if line[0]!="#"]
 
 else:
     mac=[input("mac adress : ")]
+    if mac[0] == "":
+        mac[0] = def_mac
 
+card=input("wifi card : ")
 if card=="":
-    card=input("wifi card : ")
+    card = def_card
+
 i=0
 while True:
     print("["+str(i+1)+"]-------------------------------------\n")
@@ -72,7 +81,7 @@ while True:
     os.system("macchanger -m "+mac[i]+" "+card)
     os.system("ifconfig "+card+" up")
     print("----------------------------------------\n")
-    if mode != 1:
+    if mode == 2:
         i+=1
         if i==len(mac):
             i=0
